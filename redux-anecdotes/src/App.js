@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { voteAction, createAction } from './reducers/anecdoteReducer'
 
 const App = () => {
   const anecdotes = useSelector(state => state.slice().sort((a, b) => b.votes - a.votes))
@@ -7,22 +8,14 @@ const App = () => {
 
   const vote = (id) => {
     console.log('vote', id)
-    dispatch({
-      type:'VOTE',
-      data:{id:id}
-    })
+    dispatch(voteAction(id))
   }
 
   const createNew = (event) => {
     event.preventDefault()
     const content=event.target.anecdote.value
     event.target.anecdote.value = ''
-    dispatch({
-      type:'NEW',
-      data:{
-        content:content
-      }
-    })
+    dispatch(createAction(content))
   }
   
   return (
