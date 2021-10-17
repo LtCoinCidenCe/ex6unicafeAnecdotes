@@ -1,4 +1,4 @@
-const notificationReducer = (state = 'This is the default message', action) => {
+const notificationReducer = (state = '', action) => {
   switch(action.type) {
     case 'SET_NOTIFICATION':
       return action.notification
@@ -7,10 +7,17 @@ const notificationReducer = (state = 'This is the default message', action) => {
   }
 }
 
-export const notificationAction = (content) => {
+export const notificationShow = (content) => {
   return {
     type: 'SET_NOTIFICATION',
     notification: content
+  }
+}
+
+export const notificationHide = (content) => {
+  return {
+    type: 'SET_NOTIFICATION',
+    notification: ''
   }
 }
 
