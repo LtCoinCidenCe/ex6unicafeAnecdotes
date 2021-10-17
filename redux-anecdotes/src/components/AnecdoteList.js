@@ -21,14 +21,17 @@ const Anecdote = ({ anecdote, handleClick }) =>
 const AnecdoteList = () =>
 {
   console.log('AnecdoteListComponent')
-  const anecdotes = useSelector(state => state.anecdotes.slice().sort((a, b) => b.votes - a.votes))
+  const filter = useSelector(state => state.filter)
+  const anecdotes = useSelector(state => state.anecdotes.filter(anecdote =>
+    anecdote.content.toLowerCase().includes(filter.toLowerCase())
+  ).sort((a, b) => b.votes - a.votes))
   const timeoutID = useSelector(state => state.timeoutID)
   const dispatch = useDispatch()
 
   const vote = (id) =>
   {
     dispatch(voteAction(id))
-    
+
     // set Notification
     clearTimeout(timeoutID)
     dispatch(notificationShow(`you voted '${anecdotes.find(element => element.id === id).content}'`))
