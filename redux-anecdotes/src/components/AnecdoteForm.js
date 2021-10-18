@@ -3,22 +3,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createAction } from "../reducers/anecdoteReducer"
 import { notificationHide, notificationShow } from "../reducers/notificationReducer"
 import { timeoutAction } from "../reducers/timeoutReducer"
+import anecdoteService from "../services/anecdotes"
 
 const AnecdoteForm = () =>
 {
   const dispatch = useDispatch()
   const timeoutID = useSelector(state => state.timeoutID)
 
-  const createNew = (event) =>
+  const createNew = async (event) =>
   {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    dispatch(createAction(content))
-    
+    const newA = await anecdoteService.createNew(content)
+    dispatch(createAction(newA))
+
     // set Notification
     clearTimeout(timeoutID)
-    dispatch(notificationShow(`'${content}' created`))
+    dispatch(notificationShow(`'${newA.content}' created`))
     dispatch(timeoutAction(setTimeout(() => { dispatch(notificationHide()) }, 5000)))
   }
 
