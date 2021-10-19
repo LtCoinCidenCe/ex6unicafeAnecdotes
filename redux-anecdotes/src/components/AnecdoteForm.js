@@ -1,14 +1,11 @@
 import React from "react"
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createAction } from "../reducers/anecdoteReducer"
-import { notificationHide, notificationShow } from "../reducers/notificationReducer"
-import { timeoutAction } from "../reducers/timeoutReducer"
-import anecdoteService from "../services/anecdotes"
+import { setNotification } from "../reducers/notificationReducer"
 
 const AnecdoteForm = () =>
 {
   const dispatch = useDispatch()
-  const timeoutID = useSelector(state => state.timeoutID)
 
   const createNew = async (event) =>
   {
@@ -18,9 +15,7 @@ const AnecdoteForm = () =>
     dispatch(createAction(content))
 
     // set Notification
-    clearTimeout(timeoutID)
-    dispatch(notificationShow(`'${content}' created`))
-    dispatch(timeoutAction(setTimeout(() => { dispatch(notificationHide()) }, 5000)))
+    dispatch(setNotification(`'${content}' created`, 5))
   }
 
   return <div className="newForm">
