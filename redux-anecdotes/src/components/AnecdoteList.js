@@ -28,13 +28,13 @@ const AnecdoteList = () =>
   const timeoutID = useSelector(state => state.timeoutID)
   const dispatch = useDispatch()
 
-  const vote = (id) =>
+  const vote = (anecdote) =>
   {
-    dispatch(voteAction(id))
+    dispatch(voteAction(anecdote))
 
     // set Notification
     clearTimeout(timeoutID)
-    dispatch(notificationShow(`you voted '${anecdotes.find(element => element.id === id).content}'`))
+    dispatch(notificationShow(`you voted '${anecdote.content}'`))
     dispatch(timeoutAction(setTimeout(() => { dispatch(notificationHide()) }, 5000)))
   }
 
@@ -44,7 +44,7 @@ const AnecdoteList = () =>
         <Anecdote
           key={anecdote.id}
           anecdote={anecdote}
-          handleClick={() => { vote(anecdote.id) }} />)}
+          handleClick={() => { vote(anecdote) }} />)}
     </div>)
 }
 
