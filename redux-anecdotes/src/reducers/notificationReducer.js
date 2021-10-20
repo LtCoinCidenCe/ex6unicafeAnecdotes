@@ -1,14 +1,16 @@
-// If a second action is created before the timeout of the first action
-// The notification would be closed by the first timeout action
-// To solve the that original solution was to add another reducer just to keep timeout ID
-// But useSelector can only be used in components
-// So can not use the short dispatch syntax for this
-const notificationReducer = (state = '', action) =>
+// Can not find solution not to write clearTimeout in reducer
+// Original steps 1 clearTimeout 2 setNotification
+// 3 setNewtimeout 4 saveNewtimeoutID
+const initialNotification = { text: '', timeoutID: 0 }
+const notificationReducer = (state = initialNotification, action) =>
 {
   switch (action.type)
   {
     case 'SET_NOTIFICATION':
-      return action.notification
+      return { text: action.notification, timeoutID: state.timeoutID }
+    case 'SET_TIMEOUTID':
+      clearTimeout(state.timeoutID)
+      return { text: state.text, timeoutID: action.timeoutID }
     default:
       return state
   }
@@ -22,10 +24,14 @@ export const setNotification = (content, timeoutSeconds) =>
       type: 'SET_NOTIFICATION',
       notification: content
     })
-    setTimeout(() =>
+    const timeoutID = setTimeout(() =>
     {
       dispatch({ type: 'SET_NOTIFICATION', notification: '' })
     }, 1000 * timeoutSeconds)
+    dispatch({
+      type: 'SET_TIMEOUTID',
+      timeoutID
+    })
   }
 }
 
